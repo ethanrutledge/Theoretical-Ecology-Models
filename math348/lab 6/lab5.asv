@@ -1,0 +1,56 @@
+%Ethan Rutledge
+%MATH 348
+
+
+clear;
+clc;
+
+
+T = [0      0.966   0.013   0.007   0.008   0;
+     0      0       0.01    0       0       0;
+     0      0       0.125   0.125   0.038   0;
+     0      0       0       0.238   0.245   0.023;
+     0      0       0       0       0.167   0.75;
+     322.38 0       3.448   30.17   0.862   0];
+
+tmax = 10;
+ 
+N = zeros(6,tmax);
+
+N0 = [10;
+      10;
+      10;
+      10;
+      10;
+      10];
+  
+N(:, 1) = N0;
+
+for t = 2 : length(N(1,:))
+    N(:,t) = T' * N(:,t-1);
+end
+
+figure;
+subplot(1, 2, 1);
+plot(N');
+title('Linear');
+xlabel('Number of Individuals');
+ylabel('Number of Years');
+legend('Dormant Seeds 1','Dormant Seeds 2','Rosette Small','Rosette Medium','Rosette Large','Flowering');
+subplot(1, 2, 2);
+semilogy(N');
+title('Semi-Log Y');
+xlabel('Number of Individuals');
+ylabel('Number of Years');
+legend('Dormant Seeds 1','Dormant Seeds 2','Rosette Small','Rosette Medium','Rosette Large','Flowering');
+suptitle('Population Growth of each Age Class');
+
+
+R = zeros(6, tmax);
+
+
+
+
+
+
+

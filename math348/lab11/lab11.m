@@ -1,0 +1,137 @@
+%Ethan Rutledge
+%November 10 2022
+%MATH 348
+%LAB 11
+%conways game of life
+
+clear;
+clc;
+
+iter = 15;
+size = 20;
+
+mat = zeros(size);
+
+% % 3x3 square
+% % for row = 2:4
+% %     for col = 2:4
+% %        mat(row, col) = 1; 
+% %     end
+% % end
+
+% %L shape
+% for col = 2:4
+%     mat(3, col) = 1;
+% end
+% mat(2,2) = 1;
+
+% %short upsidedown T shape
+% for col = size/2:(size/2 + 2)
+%     mat(size/2, col) = 1;
+% end
+% mat((size/2)-1,(size/2 + 1)) = 1;
+
+% %2x2 square
+% for row = 2:3
+%     for col = 2:3
+%         mat(row, col) = 1;
+%     end
+% end
+
+% %line blinker
+% for col = 2:4
+%     mat(3, col) = 1;
+% end
+
+nextMat = mat;
+imshow(imbinarize(int8(mat)), 'InitialMagnification', 10000);
+
+for i = 1:iter
+    for row = 1:size
+        for col = 1:size
+            n = neighbor(mat, row, col);
+
+            if mat(row, col) == 0 && n == 3
+                nextMat(row, col) = 1;
+            elseif mat(row, col) == 1 && (n > 3 || n < 2)
+                nextMat(row, col) = 0;
+            end
+        end
+    end
+
+    mat = nextMat;
+
+    pause(0.5);
+
+    imshow(imbinarize(int8(mat)), 'InitialMagnification', 10000);
+end
+
+function n = neighbor(mat, row, col)
+    size = length(mat);
+
+    if row == 1 
+        if col == 1
+            d = mat(row+1, col);
+            dr = mat(row+1, col+1);
+            r = mat(row, col+1);
+            n = d+dr+r;
+        elseif col == size
+            l = mat(row, col-1);
+            dl = mat(row+1, col-1);
+            d = mat(row+1, col);
+            n = l+dl+d;
+        else
+            l = mat(row, col-1);
+            dl = mat(row+1, col-1);
+            d = mat(row+1, col);
+            dr = mat(row+1, col+1);
+            r = mat(row, col+1);
+            n = l+r+dl+d+dr;
+        end
+    elseif row == size
+        if col == 1
+            ur = mat(row-1, col+1);
+            u = mat(row-1, col);
+            r = mat(row, col+1);
+            n = u+ur+r;
+        elseif col == size
+            ul = mat(row-1, col-1);
+            u = mat(row-1, col);
+            l = mat(row, col-1);
+            n = u+ul+l;
+        else 
+            ul = mat(row-1, col-1);
+            u = mat(row-1, col);
+            l = mat(row, col-1);
+            ur = mat(row-1, col+1);
+            r = mat(row, col+1);
+            n = l+r+ul+u+ur;
+        end
+    elseif col == 1
+        u = mat(row-1, col);
+        ur = mat(row-1, col+1);
+        r = mat(row, col+1);  
+        d = mat(row+1, col);
+        dr = mat(row+1, col+1);
+        n = u+d+ur+r+dr;
+    elseif col == size
+        u = mat(row-1, col);
+        d = mat(row+1, col);
+        ul = mat(row-1, col-1);
+        l = mat(row, col-1);
+        dl = mat(row+1, col-1);
+        n = u+d+ul+l+dl;
+    else
+        u = mat(row-1, col);
+        d = mat(row+1, col);
+        ul = mat(row-1, col-1);
+        l = mat(row, col-1);
+        dl = mat(row+1, col-1);
+        ur = mat(row-1, col+1);
+        r = mat(row, col+1); 
+        dr = mat(row+1, col+1);
+        n = ul+u+ur+l+r+dr+d+dl;
+    end
+end
+
+
